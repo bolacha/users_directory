@@ -1,5 +1,7 @@
 'use strict'
 
+const User = use('App/Models/User')
+
 /**
  * Resourceful controller for interacting with users
  */
@@ -9,13 +11,34 @@ class UserController {
    * GET users
    */
   async index ({ request, response, view }) {
-  }
 
-  /**
-   * Render a form to be used for creating a new user.
-   * GET users/create
-   */
-  async create ({ request, response, view }) {
+    let params = request.only(['page','offset', 'filter', 'sort', 'search'])
+
+
+    let options= {}
+
+    if (params.filter) {
+      let filters = JSON.parse(params.filter)
+
+      options = { ...options, ...filters}
+    }
+
+    let sorts = {}
+    if(params.sort) {
+      let sort_parsed = JSON.parse(params.sort)
+
+      sorts.column = sort_parsed.column
+      sorts.direction = sort_parsed.direction
+    } else {
+      sorts.column = "id"
+      sorts.direction = "ASC"
+    }
+
+    return User
+      .query()
+      .where(options)
+      .orderBy(sorts.column, sorts.direction)
+      .paginate((params.page == undefined ? 1 : params.page), (params.offset == undefined ? 15 : params.offset))
   }
 
   /**
@@ -23,35 +46,18 @@ class UserController {
    * POST users
    */
   async store ({ request, response }) {
+
+    let users = request.post();
+
+    users = users.map((e) => {
+      delete e.id;
+
+      return e;
+    })
+
+    return await User.createMany(users);
   }
 
-  /**
-   * Display a single user.
-   * GET users/:id
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing user.
-   * GET users/:id/edit
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update user details.
-   * PUT or PATCH users/:id
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a user with id.
-   * DELETE users/:id
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = UserController
