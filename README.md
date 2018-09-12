@@ -8,7 +8,7 @@ You have a Frontend team that is building a listing page that lists all the staf
 This listing page should support pagination, filtering, sorting, and a quick full-text search.
 Your job is to design and create the API server which will handle the requests from the frontend.
 
-You can use staff.json as an example dataset. (https://drive.google.com/file/d/16pApgAkl1KoJXdYlhV7HgtfU_41ylFJD/view?usp=sharing). Please create a SQL script to create and populate tables which will store this data.
+You can use staff.json as an example dataset. Please create a SQL script to create and populate tables which will store this data.
 
 Please add tests
 
@@ -26,12 +26,14 @@ Rules
 ## Requirements
 
 NodeJS - V8.11.3
+
 Postgree
 
 ## Running the Server
 
+You will need first is to install all the packages with 
 
-You will need first is to install all the packages with `npm install`
+`npm install`
 
 After all the packages are installed you just need to run the command :
 
